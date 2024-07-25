@@ -75,8 +75,13 @@ A documentação da API está disponível no Swagger UI, que pode ser acessado e
 - **POST /api/accounts**: Cria uma nova conta.
 - **PUT /api/accounts/{id}**: Atualiza uma conta existente.
 - **PATCH /api/accounts/{id}/situacao**: Altera o status de uma conta existente.
-- **GET /api/accounts**: Retorna uma lista de contas filtradas por data de vencimento e descrição.
-- **GET /api/accounts/{id}**: Retorna uma conta pelo ID.
+- **GET /api/accounts**: Retorna uma lista de contas filtradas por data de vencimento e descrição, com suporte a paginação.
+   - Parâmetros de consulta:
+      - `startDate`: Data de início para o filtro.
+      - `endDate`: Data de término para o filtro.
+      - `descricao`: Descrição para o filtro (opcional).
+      - `page`: Número da página (opcional, padrão é 0).
+      - `size`: Tamanho da página (opcional, padrão é 10).- **GET /api/accounts/{id}**: Retorna uma conta pelo ID.
 - **GET /api/accounts/total-paid**: Retorna o valor total pago em um período específico.
 - **POST /api/accounts/import**: Importa contas a partir de um arquivo CSV.
 
