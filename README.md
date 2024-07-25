@@ -44,6 +44,10 @@ Este projeto é uma aplicação de gerenciamento de contas construída usando Sp
     ```bash
     mvn clean test -Dspring.profiles.active=test
     ```
+5. **Para gerar um novo package:**
+    ```bash
+    mvn clean package
+    ```
 
 ### **Usando Docker**
 
