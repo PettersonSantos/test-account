@@ -39,12 +39,8 @@ Este projeto é uma aplicação de gerenciamento de contas construída usando Sp
 
     - O projeto está configurado para usar o banco de dados H2 em memória para testes. As migrações do Flyway serão executadas automaticamente ao iniciar a aplicação.
 
-4. **Execute a aplicação:**
-    ```bash
-    mvn spring-boot:run
-    ```
 
-5. **Para executar os testes:**
+4. **Para executar os testes:**
     ```bash
     mvn clean test -Dspring.profiles.active=test
     ```
