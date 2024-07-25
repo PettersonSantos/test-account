@@ -1,5 +1,6 @@
 package com.test.payment.account.domain.user.controller;
 
+import com.test.payment.account.IntegrationTestBase;
 import com.test.payment.account.domain.user.User;
 import com.test.payment.account.domain.user.repository.UserRepository;
 import com.test.payment.account.dto.LoginRequest;
@@ -18,26 +19,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AuthControllerTest {
+public class AuthControllerTest extends IntegrationTestBase {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @BeforeEach
-    void setUp() {
-        userRepository.deleteAll();
-        var user = new User();
-        user.setUsername("testuser");
-        user.setPassword(passwordEncoder.encode("testpassword"));
-        user.setEnabled(true);
-        userRepository.save(user);
-    }
 
     @Test
     void authenticateUserTest() throws Exception {

@@ -11,19 +11,11 @@ import jakarta.annotation.PostConstruct;
 @TestConfiguration
 public class FlywayTestConfig {
 
-    @Autowired
-    private Environment env;
-
     @Bean
     public Flyway flyway() {
         return Flyway.configure()
-                .dataSource(env.getProperty("spring.flyway.url"), env.getProperty("spring.flyway.user"), env.getProperty("spring.flyway.password"))
-                .locations(env.getProperty("spring.flyway.locations"))
+                .dataSource("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE", "sa", "password")
+                .locations("classpath:db/test/migration")
                 .load();
-    }
-
-    @PostConstruct
-    public void migrateFlyway() {
-        flyway().migrate();
     }
 }

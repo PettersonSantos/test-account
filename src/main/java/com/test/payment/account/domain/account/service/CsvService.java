@@ -46,7 +46,7 @@ public class CsvService {
             }
 
             accountRepository.saveAll(accounts);
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             throw new RuntimeException("Failed to parse CSV file: " + e.getMessage());
         }
     }
