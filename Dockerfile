@@ -1,8 +1,8 @@
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:17-jre-focal
 
 WORKDIR /app
 
-COPY target/myapp.jar /app/myapp.jar
+COPY target/account-0.0.1-SNAPSHOT.jar /app/myapp.jar
 
 EXPOSE 8080
 

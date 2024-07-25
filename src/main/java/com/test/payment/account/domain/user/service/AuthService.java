@@ -1,5 +1,6 @@
 package com.test.payment.account.domain.user.service;
 
+import com.test.payment.account.config.JwtTokenProvider;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.*;
@@ -17,20 +18,13 @@ import java.util.Date;
 @Service
 public class AuthService {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
-
-    @Value("${jwt.expiration}")
-    private Long expiration;
-
     private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider tokenProvider;
 
-    public AuthService(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    @Autowired
+    public AuthService(AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
+        this.tokenProvider = tokenProvider;
     }
 
     public String authenticate(String username, String password) {
@@ -39,16 +33,6 @@ public class AuthService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return generateToken(authentication);
-    }
-
-    private String generateToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact();
+        return tokenProvider.generateToken((UserDetails) authentication.getPrincipal());
     }
 }

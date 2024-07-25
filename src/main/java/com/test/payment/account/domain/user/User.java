@@ -1,9 +1,9 @@
 package com.test.payment.account.domain.user;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 
 
 @Entity
@@ -23,8 +23,4 @@ public class User {
 
     @Column(nullable = false)
     private boolean enabled;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
 }

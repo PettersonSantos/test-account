@@ -1,13 +1,12 @@
 package com.test.payment.account.domain.user.service;
 
-import com.test.payment.account.domain.user.Role;
 import com.test.payment.account.domain.user.User;
 import com.test.payment.account.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.test.payment.account.domain.user.repository.UserRepository;
-import com.test.payment.account.domain.user.repository.RoleRepository;
 
 import java.util.Optional;
 
@@ -18,9 +17,6 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public UserDTO saveUser(User user) {
@@ -29,12 +25,9 @@ public class UserService {
         return convertToDTO(userSaved);
     }
 
-    public Role saveRole(Role role) {
-        return roleRepository.save(role);
-    }
-
     public UserDTO findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));;
         return convertToDTO(user);
     }
 
@@ -45,7 +38,6 @@ public class UserService {
             existingUser.setUsername(user.getUsername());
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
             existingUser.setEnabled(user.isEnabled());
-            existingUser.setRole(user.getRole());
             User userUpdated = userRepository.save(existingUser);
             return convertToDTO(userUpdated);
         } else {
