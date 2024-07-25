@@ -51,14 +51,9 @@ Para executar o projeto usando Docker:
 
 1. **Certifique-se de que o Docker está instalado e em execução.**
 
-2. **Construa a imagem Docker:**
+2. **Execute o comando Docker Compose:**
     ```bash
-    docker build -t test-account .
-    ```
-
-3. **Execute o contêiner:**
-    ```bash
-    docker run -p 8080:8080 test-account
+    docker-compose up --build .
     ```
 
 ## **Documentação da API**
