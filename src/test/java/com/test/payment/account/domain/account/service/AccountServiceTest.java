@@ -15,6 +15,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -80,15 +85,22 @@ public class AccountServiceTest {
 
     @Test
     void testGetAccountsByDueDateAndDescription() {
-        when(accountRepository.findByDataVencimentoBetweenAndDescricaoContaining(any(LocalDate.class), any(LocalDate.class), anyString()))
-                .thenReturn(Arrays.asList(account));
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Account> accountsList = Arrays.asList(account);
+        Page<Account> accountsPage = new PageImpl<>(accountsList, pageable, accountsList.size());
 
-        List<Account> accounts = accountService.getAccountsByDueDateAndDescription(LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 31), "Test");
+        when(accountRepository.findByDataVencimentoBetweenAndDescricaoContaining(
+                any(LocalDate.class), any(LocalDate.class), anyString(), any(Pageable.class)))
+                .thenReturn(accountsPage);
+
+        Page<Account> accounts = accountService.getAccountsByDueDateAndDescription(
+                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 31), "Test", pageable);
 
         assertNotNull(accounts);
-        assertEquals(1, accounts.size());
+        assertEquals(1, accounts.getTotalElements());
         verify(accountRepository, times(1))
-                .findByDataVencimentoBetweenAndDescricaoContaining(LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 31), "Test");
+                .findByDataVencimentoBetweenAndDescricaoContaining(
+                        LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 31), "Test", pageable);
     }
 
     @Test

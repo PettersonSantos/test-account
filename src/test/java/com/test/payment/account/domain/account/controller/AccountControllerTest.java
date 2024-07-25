@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -93,9 +93,15 @@ public class AccountControllerTest extends IntegrationTestBase {
                         .header("Authorization", "Bearer " + token)
                         .param("startDate", "2023-01-01")
                         .param("endDate", "2023-12-31")
-                        .param("descricao", ""))
+                        .param("descricao", "")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content.length()").value(lessThanOrEqualTo(10)))
+                .andExpect(jsonPath("$.totalElements").exists())
+                .andExpect(jsonPath("$.totalPages").exists())
+                .andExpect(jsonPath("$.number").value(0));
     }
 
     @Test

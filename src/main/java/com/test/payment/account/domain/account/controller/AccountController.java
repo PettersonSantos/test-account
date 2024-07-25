@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -51,11 +53,14 @@ public class AccountController {
 
     @GetMapping
     @Operation(summary = "View a list of available accounts", description = "View a list of available accounts filtered by due date and description", tags = { "accounts" })
-    public ResponseEntity<List<Account>> getAccountsByDueDateAndDescription(
+    public ResponseEntity<Page<Account>> getAccountsByDueDateAndDescription(
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate,
-            @RequestParam(required = false, defaultValue = "") String descricao) {
-        List<Account> accounts = accountService.getAccountsByDueDateAndDescription(startDate, endDate, descricao);
+            @RequestParam(required = false, defaultValue = "") String descricao,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Account> accounts = accountService.getAccountsByDueDateAndDescription(startDate, endDate, descricao, pageable);
         return ResponseEntity.ok(accounts);
     }
 

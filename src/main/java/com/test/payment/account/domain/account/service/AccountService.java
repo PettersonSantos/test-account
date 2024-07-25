@@ -4,6 +4,8 @@ import com.test.payment.account.domain.account.Account;
 import com.test.payment.account.domain.account.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,8 +41,8 @@ public class AccountService {
         return accountRepository.save(existingAccount);
     }
 
-    public List<Account> getAccountsByDueDateAndDescription(LocalDate startDate, LocalDate endDate, String descricao) {
-        return accountRepository.findByDataVencimentoBetweenAndDescricaoContaining(startDate, endDate, descricao);
+    public Page<Account> getAccountsByDueDateAndDescription(LocalDate startDate, LocalDate endDate, String descricao, Pageable pageable) {
+        return accountRepository.findByDataVencimentoBetweenAndDescricaoContaining(startDate, endDate, descricao, pageable);
     }
 
     public Account getAccountById(Long id) {
