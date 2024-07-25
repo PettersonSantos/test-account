@@ -8,6 +8,7 @@ Este projeto é uma aplicação de gerenciamento de contas construída usando Sp
 - **Spring Boot 3.3.2**
 - **Spring Security**
 - **Spring Data JPA**
+- **PostgreSQL 12.0**
 - **H2 Database**
 - **Flyway**
 - **JWT (JSON Web Token)**
